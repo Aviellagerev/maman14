@@ -1,0 +1,3 @@
+C:/Users/aviel/OneDrive/desktop/maman14/cmake-build-debug/CMakeFiles/maman14.dir
+C:/Users/aviel/OneDrive/desktop/maman14/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/aviel/OneDrive/desktop/maman14/cmake-build-debug/CMakeFiles/rebuild_cache.dir
