@@ -1,12 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "preambley.c"
+#include "test.h"
 int handle_terminal_input(int argc,char *argv[]);
 void handle_file(char *arg);
 int main(int argc,char *argv[]) {
-    printf("hello pre assmble test ");
+    printf("hello pre assmble test \n");
+    test();
+    test3();
     handle_terminal_input(argc,argv);
         /*
+         *
+         * need to make states for stuff inside the hash table(macro for starters and what is insize said macro)
+         *
          * need to add hash table to figure out how to store the macros
          * efines (A R E all the r1,r2 exc)
          * after that finish the pre proccesor
