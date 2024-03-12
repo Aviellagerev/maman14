@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "preambley.c"
-#include "test.h"
+#include "preambley.h"
+#include "test.c"
+#include "table.c"
+#define SRC_FILE_EXTENTION ".as"
+
 int handle_terminal_input(int argc,char *argv[]);
 void handle_file(char *arg);
 int main(int argc,char *argv[]) {
     printf("hello pre assmble test \n");
-    test();
-    test3();
+
     handle_terminal_input(argc,argv);
         /*
          *
@@ -38,5 +40,27 @@ int handle_terminal_input(int argc,char *argv[]){
 }
 void handle_file(char *arg){
     FILE  *src = NULL,*target = NULL;
+    char *file_name = (char *)calloc(strlen(arg)+4,sizeof(char *));
+    strncpy( file_name , arg , strlen(arg));
+    strcat(file_name,SRC_FILE_EXTENTION);
+    if((src = fopen(file_name,"r"))==NULL){
+        fprintf(stderr,"EL PROBLEM SIR IN SRC");
+        free(file_name);
+        return;
+    }
+    file_name[strlen(file_name)-1]='m';/*change file extention to am*/
+    if((target = fopen(file_name,"w+"))==NULL){
+        fprintf(stderr,"EL PROBLEM SIR IN TARGET");
+        free(file_name);
+        return;
+    }
+    else{
+        initTables();
+
+    }
+
+
+
+
 
 }
