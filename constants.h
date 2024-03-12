@@ -5,6 +5,8 @@
 #ifndef MAMAN14_CONSTANTS_H
 #define MAMAN14_CONSTANTS_H
 
+#define SRC_FILE_EXTENTION ".as"
+
 #define BINARY_WORD_SIZE 20
 #define MEMORY_START 100
 #define REGS_SIZE 16

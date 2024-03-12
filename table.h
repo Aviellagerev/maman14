@@ -4,19 +4,9 @@
 
 #ifndef MAMAN14_TABLE_H
 #define MAMAN14_TABLE_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include "constants.h"
+#include "library.h"
+#include "typedefs.h"
 
-
-typedef struct
-{
-    int start;
-    int end;
-} MacroData;
 /*
  * typedef struct
 {
@@ -27,21 +17,7 @@ typedef struct
 } SymbolData;
 */
 
-typedef enum
-{
-    Macro,
-    Symbol
-} ItemType;
-typedef struct Item
-{
-    char *name;
-    union
-    {
-       /* SymbolData s;*/
-        MacroData m;
-    } val;
-    struct Item *next;
-} Item;
+
 char *cloneString(char *s);
 void initTables();
 unsigned hash(char *s);

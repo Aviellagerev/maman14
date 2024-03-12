@@ -2,21 +2,12 @@
 // Created by Aviel on 11/03/2024.
 //
 #include "table.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include "constants.h"
 static Item *symbols[HASHSIZE] = {0};
 static Item *macros[HASHSIZE] = {0};
 static unsigned entriesCount = 0;
 static unsigned externalCount = 0;
 /*might move to another file */
-int test2(){
-    printf("you are in table MOTHERFUCKER \n");
-    return 69;
-}
+
 char *cloneString(char *s)
 {
     char *copy;

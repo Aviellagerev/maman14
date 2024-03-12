@@ -1,9 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
+
+#include "library.h"
+#include "constants.h"
 #include "preambley.h"
-#include "test.c"
-#include "table.c"
-#define SRC_FILE_EXTENTION ".as"
+#include "table.h"
+#include "typedefs.h"
+
 
 int handle_terminal_input(int argc,char *argv[]);
 void handle_file(char *arg);
@@ -39,7 +40,7 @@ int handle_terminal_input(int argc,char *argv[]){
 
 }
 void handle_file(char *arg){
-    FILE  *src = NULL,*target = NULL;
+    FILE *src = NULL,*target = NULL;
     char *file_name = (char *)calloc(strlen(arg)+4,sizeof(char *));
     strncpy( file_name , arg , strlen(arg));
     strcat(file_name,SRC_FILE_EXTENTION);
@@ -56,7 +57,7 @@ void handle_file(char *arg){
     }
     else{
         initTables();
-
+        read_source_file(src, target);
     }
 
 
