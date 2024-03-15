@@ -56,6 +56,9 @@ void handle_file(char *arg){
         return;
     }
     else{
+        int c;
+
+
         initTables();
         read_source_file(src, target);
     }

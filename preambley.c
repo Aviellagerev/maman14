@@ -2,52 +2,18 @@
 // Created by aviel on 06/03/2024.
 //
 
+
 #include "preambley.h"
-#include "table.h"
-#include "table.c"
-#include "states.h"
-#include "states.c"
-#include "library.h"
+/*int assmble(){
+
+    FILE *rptr = fopen();
+}*/
 int test() {
     printf("eat by balls pre\n");
     return 69;
 }
-
-void read_source_file(FILE *src, FILE *des) {
-    char line[81] = {0};
-    char line_cpy[81] = {0};
-    char *token, c;
-    int i = 0;
-    void (*resetCurrentLineCounter)() = &resetCurrentLineNumber;
-    (*resetCurrentLineCounter)();
-    while (((c = fgetc(src)) != EOF)) {
-        line[i++] = c;
-        if (i >= 81 - 2 && !isspace(c)) {
-            c = '\n';
-        }
-        if (c == '\n') {
-            if (i > 0) {
-                strncpy(line_cpy, line, i);
-                token = strtok(line_cpy, " \t\n\f\r");
-                if (token != NULL)
-                    write_destenation_file(line, token, src, des);
-
-                memset(line_cpy, 0, i);
-
-                memset(line, 0, i);
-
-                i = 0;
-            }
-        }
-    }
-    if (i > 0)
-    {
-        strcpy(line_cpy, line);
-        token = strtok(line_cpy, " \t\n\f\r");
-        if (token != NULL)
-            write_destenation_file(line, token, src, des);
-    }
-}
+void (*setState)(State) = &setGlobalState;
+State (*globalState)() = &getGlobalState;
 
 void write_destination_file(char *line,char *token,FILE *src, FILE *des){
     void (*currentLineNumberPlusPlus)() = &increaseCurrentLineNumber;
@@ -119,3 +85,39 @@ void write_destination_file(char *line,char *token,FILE *src, FILE *des){
     }
 
 }
+void read_source_file(FILE *src, FILE *des) {
+    char line[81] = {0};
+    char line_cpy[81] = {0};
+    char *token, c;
+    int i = 0;
+    void (*resetCurrentLineCounter)() = &resetCurrentLineNumber;
+    (*resetCurrentLineCounter)();
+    while (((c = fgetc(src)) != EOF)) {
+        line[i++] = c;
+        if (i >= 81 - 2 && !isspace(c)) {
+            c = '\n';
+        }
+        if (c == '\n') {
+            if (i > 0) {
+                strncpy(line_cpy, line, i);
+                token = strtok(line_cpy, " \t\n\f\r");
+                if (token != NULL)
+                    write_destination_file(line, token, src, des);
+
+                memset(line_cpy, 0, i);
+
+                memset(line, 0, i);
+
+                i = 0;
+            }
+        }
+    }
+    if (i > 0)
+    {
+        strcpy(line_cpy, line);
+        token = strtok(line_cpy, " \t\n\f\r");
+        if (token != NULL)
+            write_destination_file(line, token, src, des);
+    }
+}
+
