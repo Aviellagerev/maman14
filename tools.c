@@ -20,6 +20,20 @@ Bool isLegalMacroName(char *s)
 {
     return True;/*!isInstructionStrict(s) && !isOperation(s) ? True : False;*/
 }
+char *trim_from_left(char *s)
+{
+    while (isspace(*s) && *s != '\0')
+        s++;
+    return s;
+}
+Bool is_comment(char *s)
+{
+    s = trim_from_left(s);
+    return s[0] == ';' ? True : False;
+}
+Bool is_mdefine(char*s){
+    return s[0]=='.'?True:False;
+}
 /*Bool isLabelDeclarationStrict(char *s)
 {
     return s[strlen(s) - 1] == ':' ? True : False;

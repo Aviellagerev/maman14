@@ -17,6 +17,28 @@ char *cloneString(char *s)
     strcpy(copy, s);
     return copy;
 }
+void printMacroTable()
+{
+    int i = 0;
+    printf("\n\t ~ MACRO TABLE ~ \n");
+    printf("\tname\tstart\tend");
+    while (i < HASHSIZE)
+    {
+        if (macros[i] != NULL)
+            printMacroItem(macros[i]);
+        i++;
+    }
+    printf("\n\n");
+}
+int printMacroItem(Item *item)
+{
+
+    printf("\n\t%s\t %5d\t%6d", item->name, item->val.m.start, item->val.m.end);
+    if (item->next != NULL)
+        printMacroItem(item->next);
+    return 0;
+}
+
 
 void initTables()
 {
@@ -32,44 +54,90 @@ void initTables()
 }
 unsigned hash(char *s)
 {
-    unsigned hashval = 1;
-    for (hashval = 0; *s != '\0'; s++)
-        hashval = *s + 31 * hashval;
-    return hashval % HASHSIZE;
+    unsigned hash_value = 1;
+    for (hash_value = 0; *s != '\0'; s++)
+        hash_value = *s + 31 * hash_value;
+    return hash_value % HASHSIZE;
 }
+void freeHashTable(ItemType type)
+{
+
+    int i = 0;
+    while (i < HASHSIZE)
+    {
+
+        if (type == Symbol)
+        {
+            if (symbols[i] != NULL)
+                freeTableItem(symbols[i]);
+        }
+        else
+        {
+            if (macros[i] != NULL)
+                freeTableItem(macros[i]);
+        }
+
+        i++;
+    }
+}
+void freeTableItem(Item *item)
+{
+    if (item->next != NULL)
+        freeTableItem(item->next);
+    /*     printf("item->name:%s\n", item->name); */
+    free(item);
+    return;
+}
+
 Item *search(char *s, ItemType type)
 {
-    Item *np;
+    unsigned hash_value;
+    Item *node_pointer;
     int i = hash(s);
-    for (np = (type == Symbol ? symbols[i] : macros[i]); np != NULL; np = np->next)
-        if (!strcmp(s, np->name))
-            return np;
+    for (node_pointer = (type == Symbol ? symbols[i] : macros[i]); node_pointer != NULL; node_pointer = node_pointer->next)
+        if (!strcmp(s, node_pointer->name))
+            return node_pointer;
 
     return NULL;
 }
 Item *add_item(char *name ,ItemType type){
-    unsigned hashval;
-    Item *np;
-    np = (Item *)malloc(sizeof(Item));
 
-    if (np == NULL)
+    unsigned hash_value;
+    Item *node_pointer;
+    node_pointer = (Item *)malloc(sizeof(Item));
+
+    if (node_pointer == NULL)
     {
-        return NULL; /*error handiling here later*/
+     /*error here */
+        return NULL;
     }
-    else{
-        np->name = cloneString(name);
-        if(type==Macro){
-            np->val.m.start = -1;
-            np->val.m.end = -1;
-        }
-        hashval = hash(name);
-        np->next = (type == Symbol ? symbols[hashval] : macros[hashval]);
+    else
+    {
+        node_pointer->name = cloneString(name);
         if (type == Symbol)
-            symbols[hashval] = np;
+        {
+            node_pointer->val.s.attrs.code = 0;
+            node_pointer->val.s.attrs.entry = 0;
+            node_pointer->val.s.attrs.external = 0;
+            node_pointer->val.s.attrs.data = 0;
+            node_pointer->val.s.attrs.mdefine=0;
+            node_pointer->val.s.base = 0;
+            node_pointer->val.s.value = 0;
+            node_pointer->val.s.offset = 0;
+        }
+        else if (type == Macro) {
+            node_pointer->val.m.start = -1;
+            node_pointer->val.m.end = -1;
+        }
+        hash_value = hash(name);
+        node_pointer->next = (type == Symbol ? symbols[hash_value] : macros[hash_value]);
+        if (type == Symbol)
+            symbols[hash_value] = node_pointer;
         else
-            macros[hashval] = np;
+            macros[hash_value] = node_pointer;
     }
-    return np;
+
+    return node_pointer;
 }
 Item *getMacro(char *s)
 {
@@ -96,5 +164,35 @@ Item *addMacro(char *name, int start, int end)
 
     return macro;
 }
+Bool addSymbol(char *name, unsigned value, unsigned is_code, unsigned is_data, unsigned is_entry, unsigned is_external,unsigned is_mdefine)
+{
+    unsigned base;
+    unsigned offset;
+    Item *pointer;
 
+    if (name[strlen(name) - 1] == ':')
+        name[strlen(name) - 1] = '\0';
+/*
+    if (!verifyLabelNamingAndPrintErrors(name))
+        return False;
+    pointer = lookup(name, Symbol);
+    if (pointer != NULL)
+        return updateSymbol(pointer, value, isCode, isData, isEntry, isExternal);
+        */
+    else
+    {
+        pointer = add_item(name, Symbol);
+        offset = value % 16;
+        base = value - offset;
+        pointer->val.s.value = value;
+        pointer->val.s.base = base;
+        pointer->val.s.offset = offset;
+        pointer->val.s.attrs.code = is_code ? 1 : 0;
+        pointer->val.s.attrs.entry = is_entry ? 1 : 0;
+        pointer->val.s.attrs.external = is_external ? 1 : 0;
+        pointer->val.s.attrs.data = is_data ? 1 : 0;
+    }
+
+    return True;
+}
 

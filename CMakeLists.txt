@@ -13,4 +13,10 @@ add_executable(maman14 main.c preambley.c preambley.h
         tools.c
         tools.h
         typedefs.h
+        memory.c
+        memory.h
+        firstrun.c
+        firstrun.h
+        print.c
+        print.h
 )

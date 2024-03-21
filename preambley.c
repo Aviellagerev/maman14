@@ -8,10 +8,7 @@
 
     FILE *rptr = fopen();
 }*/
-int test() {
-    printf("eat by balls pre\n");
-    return 69;
-}
+
 void (*setState)(State) = &setGlobalState;
 State (*globalState)() = &getGlobalState;
 
@@ -47,6 +44,7 @@ void write_destination_file(char *line,char *token,FILE *src, FILE *des){
         {
 
             return;
+
         }
         if (!isLegalMacroName(next))
         {
@@ -119,5 +117,6 @@ void read_source_file(FILE *src, FILE *des) {
         if (token != NULL)
             write_destination_file(line, token, src, des);
     }
+    (*setState)(firstRun);
 }
 

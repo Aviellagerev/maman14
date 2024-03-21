@@ -3,9 +3,9 @@
 #include "constants.h"
 #include "preambley.h"
 #include "table.h"
+#include "states.h"
 #include "typedefs.h"
-
-
+#include "memory.h"
 int handle_terminal_input(int argc,char *argv[]);
 void handle_file(char *arg);
 int main(int argc,char *argv[]) {
@@ -28,6 +28,7 @@ int main(int argc,char *argv[]) {
 }
 int handle_terminal_input(int argc,char *argv[]){
     int file_counter = argc-1;
+
     int i=1;
     if(file_counter<1){
         fprintf(stderr,"need a file to start mny guy");      /*random msg that will change */
@@ -40,7 +41,12 @@ int handle_terminal_input(int argc,char *argv[]){
 
 }
 void handle_file(char *arg){
-    FILE *src = NULL,*target = NULL;
+
+    FILE *src = NULL,*des = NULL;
+
+    State (*globalState)() = &getGlobalState;
+    void (*setState)(State) = &setGlobalState;
+
     char *file_name = (char *)calloc(strlen(arg)+4,sizeof(char *));
     strncpy( file_name , arg , strlen(arg));
     strcat(file_name,SRC_FILE_EXTENTION);
@@ -50,21 +56,26 @@ void handle_file(char *arg){
         return;
     }
     file_name[strlen(file_name)-1]='m';/*change file extention to am*/
-    if((target = fopen(file_name,"w+"))==NULL){
-        fprintf(stderr,"EL PROBLEM SIR IN TARGET");
+    if((des = fopen(file_name,"w+"))==NULL){
+        fprintf(stderr,"EL PROBLEM SIR IN des");
         free(file_name);
         return;
     }
     else{
-        int c;
-
-
         initTables();
-        read_source_file(src, target);
+
+        (*setState)(parsingMacros);
+        resetMemoryCounters();
+        read_source_file(src, des);
+        printMacroTable();
+        if ((*globalState)() == firstRun) {
+            rewind(des);
+
+        }
+        }
     }
 
 
 
 
 
-}

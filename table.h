@@ -16,8 +16,10 @@
    Attributes attrs; add later
 } SymbolData;
 */
-
-
+int printMacroItem(Item *item);
+void freeTableItem(Item *item);
+void freeHashTable(ItemType type);
+void printMacroTable();
 char *cloneString(char *s);
 void initTables();
 unsigned hash(char *s);
