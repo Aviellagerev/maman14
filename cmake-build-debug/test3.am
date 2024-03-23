@@ -1,0 +1,18 @@
+.define sz = 2
+MAIN: mov r3, LIST[sz]
+LOOP: jmp L1
+ prn #-5
+ mov STR[5], STR[2]
+ sub r1, r4
+ cmp r3, #sz
+ bne END
+endL1: inc K
+ bne LOOP
+END: hlt
+.define len = 4
+bcmp r1,r2
+cmp r2,r3
+add r3,r3
+endmSTR: .string “abcdef”
+LIST: .data 6, -9, len
+K: .data 22 
